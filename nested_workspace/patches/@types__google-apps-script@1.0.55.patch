@@ -1,0 +1,46 @@
+diff --git a/addons/google-apps-script.addon-event-objects.d.ts b/addons/google-apps-script.addon-event-objects.d.ts
+index e8e1e0f3b6a65aa10d26591cb4dd20c7c66b24cc..860871bdb0e5ef656b440610ea012296173a4c36 100755
+--- a/addons/google-apps-script.addon-event-objects.d.ts
++++ b/addons/google-apps-script.addon-event-objects.d.ts
+@@ -21,6 +21,24 @@ declare namespace GoogleAppsScript {
+             gmail?: GmailEventObject | undefined;
+             sheets?: SheetsEventObject | undefined;
+             slides?: SlidesEventObject | undefined;
++
++            // ASANA BEGIN
++            // deprecated fields on the event object.
++            // TODO: remove these
++            formInput: { [key: string]: string };
++            formInputs: { [key: string]: string[] };
++            parameters: { [key: string]: string };
++            messageMetadata: {
++                /**
++                 * An access token. You can use this to enable access to user data using temporary Gmail add-on scopes.
++                 */
++                accessToken: string;
++                /**
++                 * The message ID of the thread open in the Gmail UI.
++                 */
++                messageId: string;
++            };
++            // ASANA END
+         }
+
+         type InvitationResponseStatus = "accepted" | "declined" | "needsAction" | "tentative";
+diff --git a/google-apps-script.base.d.ts b/google-apps-script.base.d.ts
+index 84bf42dd1cedb72dfca7cbea01f5ad5180fb8f13..2dd2ef1703806d75881783f27ea343c3a5b9d227 100755
+--- a/google-apps-script.base.d.ts
++++ b/google-apps-script.base.d.ts
+@@ -541,7 +541,12 @@ declare namespace GoogleAppsScript {
+
+ declare var Browser: GoogleAppsScript.Base.Browser;
+ declare var Logger: GoogleAppsScript.Base.Logger;
+-declare var MimeType: GoogleAppsScript.Base.MimeType;
++// MimeType doesn't seem to be referenced anywhere in these .d.ts files or in our code,
++// and it conflicts with the MimeType declaration in lib.dom.d.ts.
++// Even though GoogleAppsScripts should not reference the DOM, we can't remove dom from the
++// lib setting because of limitations of our `assert` library (see
++// https://app.asana.com/0/1144023126606397/1203930638147021/f for more details).
++// declare var MimeType: GoogleAppsScript.Base.MimeType;
+ declare var Session: GoogleAppsScript.Base.Session;
+ declare var console: Console;

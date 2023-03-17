@@ -1,0 +1,13 @@
+lockfileVersion: 5.4
+
+specifiers:
+  '@types/google-apps-script': 1.0.55
+
+dependencies:
+  '@types/google-apps-script': 1.0.55
+
+packages:
+
+  /@types/google-apps-script/1.0.55:
+    resolution: {integrity: sha512-rrZ2jUdroRbbbDNEYTi5HbxiJYa4K5cpanIzRaiK5bnI0GxRtROZUT8Zjt6IIrPp1SUL+8w+T5bR8ZLwF9FkBA==, registry: https://registry.yarnpkg.com/}
+    dev: false

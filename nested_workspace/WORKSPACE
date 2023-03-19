@@ -1,0 +1,15 @@
+workspace(
+    name = "nested_workspace",
+)
+ 
+load("//:workspace_setup.bzl", "download_external_dependencies")
+
+download_external_dependencies()
+
+load("//:js_setup.bzl", "set_up_rules_js_and_npm")
+
+set_up_rules_js_and_npm()
+
+load("//:npm_repository_setup.bzl", "set_up_npm_repository")
+
+set_up_npm_repository()

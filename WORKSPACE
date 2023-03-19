@@ -4,41 +4,17 @@ local_repository(
     name = nested_project_name,
     path = __workspace_dir__ + "/nested_workspace",
 )
+ 
+# even if all of these external deps + rules are only used transitively via @nested_workspace, we have to set them up for this
+# root workspace as well (https://github.com/bazelbuild/bazel/issues/2391)
+load("@nested_workspace//:workspace_setup.bzl", "download_external_dependencies")
 
-load("@bazel_tools//tools/build_defs/repo:http.bzl", "http_archive")
+download_external_dependencies()
 
-http_archive(
-    name = "aspect_rules_js",
-    sha256 = "a592fafd8a27b2828318cebbda0003686c6da3318df366b563e8beeffa05a02c",
-    strip_prefix = "rules_js-1.21.0",
-    url = "https://github.com/aspect-build/rules_js/releases/download/v1.21.0/rules_js-v1.21.0.tar.gz",
-)
+load("@nested_workspace//:js_setup.bzl", "set_up_rules_js_and_npm")
 
-load("@aspect_rules_js//js:repositories.bzl", "rules_js_dependencies")
+set_up_rules_js_and_npm()
 
-rules_js_dependencies()
+load("@nested_workspace//:npm_repository_setup.bzl", "set_up_npm_repository")
 
-load("@rules_nodejs//nodejs:repositories.bzl", "DEFAULT_NODE_VERSION", "nodejs_register_toolchains")
-
-nodejs_register_toolchains(
-    name = "nodejs",
-    node_version = "14.20.0",
-)
-
-load("@aspect_rules_js//npm:npm_import.bzl", "npm_translate_lock")
-
-npm_translate_lock(
-    name = "npm",
-    pnpm_lock = "//:pnpm-lock.yaml",
-    patch_args = {
-        "*": ["-p1"]
-    },
-    # data =["@nested_workspace//:patches/@types__google-apps-script@1.0.55.patch"]
-    patches = {
-        "@types/google-apps-script": ["@nested_workspace//:patches/@types__google-apps-script@1.0.55.patch"],
-    }
-)
-
-load("@npm//:repositories.bzl", "npm_repositories")
-
-npm_repositories()
+set_up_npm_repository()
